@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Author: Tyler Waters
+# Author: Tyler W.
 #
 # This script is intended for personal use only and may not behave as expected
 # on your system. Critical system configs will be altered without creating backups 
@@ -7,12 +7,10 @@
 set -e
 hash sudo apt-get sed wget
 
-fullpath=$(dirname $(realpath $0))
+echo "== Starting Post-Install Script =="
 
-echo "== Starting Post-Install script at $fullpath =="
-
-if (( ! $EUID )); then
-	echo "$(basename $0) should NOT be ran as root, user specific changes will be made." 
+if (( ! EUID )); then
+	echo "$(basename "$0") should NOT be ran as root, user specific changes will be made." 
 	echo "You may be prompted for your password several times." 
 	exit 1
 fi
@@ -29,8 +27,8 @@ apt-transport-https"
 gnomeextension="gnome-shell-extension-impatience gnome-shell-extension-no-annoyance gnome-shell-extensions gnome-shell-extension-dashtodock"
 
 echo "== Installing/Removing user specified Applications =="
-sudo apt-get remove -y $packageremove
-sudo apt-get install -y $packageinstall $gnomeextension
+sudo apt-get remove -y "$packageremove"
+sudo apt-get install -y "$packageinstall" "$gnomeextension"
 
 # Completely remove snap subsystem. This will remove some gnome applications from the system
 # including: gnome-calculator gnome-characters gnome-logs gnome-system-monitor
@@ -59,7 +57,7 @@ fi
 
 # install user.js located in same folder as script into all default firefox profile(s)
 if [ -e user.js ]; then
-    cp -r user.js $HOME/.mozilla/firefox/{*.default,*.default-release}
+    cp -r user.js "$HOME"/.mozilla/firefox/{*.default,*.default-release}
 fi
 
 # remove livepatch form applications launcher
@@ -73,18 +71,3 @@ sudo apt-get autoremove
 echo "== Set-up is complete =="
 echo "== Please reboot the system by running 'reboot' =="
 exit 0
-
-##TODO
-#integrate dotfiles, possibly pull from a seperate repo and use GNU Stow/bash script
-#use gsettings to configure gnome as preferred vs defaults
-#gsettings set org.gnome.desktop.interface clock-show-weekday true
-#gsettings set org.gnome.nautilus.icon-view default-zoom-level 'standard'
-#gsettings set org.gnome.shell enabled-extensions "['dash-to-dock@micxgx.gmail.com','impatience@gfxmonk.net','noannoyance@sindex.com','dynamic-panel-transparency@rockon999.github.io','ubuntu-appindicators@ubuntu.com','user-theme@gnome-shell-extensions.gcampax.github.com']"
-#gsettings set org.gnome.system.location enabled false
-#gsettings set org.gnome.Terminal.Legacy.Settings theme-variant 'dark'
-#gsettings set org.gnome.shell favorite-apps "['firefox.desktop', 'org.gnome.Nautilus.desktop', 'org.gnome.Software.desktop', 'code.desktop', 'com.spotify.Client.desktop', 'org.gnome.Terminal.desktop']""
-#gsettings set org.gnome.shell enable-hot-corners true
-#gsettings set org.gnome.desktop.peripherals.touchpad tap-to-click false
-#gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled true 
-#gsettings set org.gnome.settings-daemon.plugins.color night-light-schedule-automatic true 
-#gsettings set org.gnome.settings-daemon.plugins.color night-light-temperature 5150
