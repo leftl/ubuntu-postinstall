@@ -7,6 +7,16 @@
 set -e
 hash sudo apt-get sed wget
 
+# --- Configuration Block ---
+apt_remove="gnome-shell-extension-ubuntu-dock gnome-shell-extension-ubuntu-dock"
+apt_install="tlp tlp-rdw gnome-tweaks gnome-calculator gnome-system-monitor gnome-logs gnome-characters youtube-dl chrome-gnome-shell ffmpeg 
+mpv flatpak gnome-software-plugin-flatpak chromium-browser pepperflashplugin-nonfree gparted zsh zsh-syntax-highlighting tmux printer-driver-cups-pdf 
+unrar htop curl git ubuntu-restricted-extras transmission neofetch fonts-noto-color-emoji fonts-font-awesome ttf-mscorefonts-installer 
+apt-transport-https"
+apt_gnome_extension=""
+flatpak_install="com.spotify.Client org.gimp.GIMP"
+# ---------------------------
+
 echo "== Starting Post-Install Script =="
 
 if (( ! EUID )); then
@@ -18,17 +28,9 @@ fi
 sudo apt-get update
 sudo apt-get dist-upgrade -y
 
-# Packages to be removed and installed via apt: edit as needed.
-packageremove="gnome-shell-extension-ubuntu-dock gnome-shell-extension-ubuntu-dock"
-packageinstall="tlp tlp-rdw gnome-tweaks gnome-calculator gnome-system-monitor gnome-logs gnome-characters youtube-dl chrome-gnome-shell ffmpeg 
-mpv flatpak gnome-software-plugin-flatpak chromium-browser pepperflashplugin-nonfree gparted zsh zsh-syntax-highlighting tmux printer-driver-cups-pdf 
-unrar htop curl git ubuntu-restricted-extras transmission neofetch fonts-noto-color-emoji fonts-font-awesome ttf-mscorefonts-installer 
-apt-transport-https"
-gnomeextension="gnome-shell-extension-impatience gnome-shell-extension-no-annoyance gnome-shell-extensions gnome-shell-extension-dashtodock"
-
 echo "== Installing/Removing user specified Applications =="
-sudo apt-get remove -y "$packageremove"
-sudo apt-get install -y "$packageinstall" "$gnomeextension"
+sudo apt-get remove -y "$apt_remove"
+sudo apt-get install -y "$apt_install" "$apt_gnome_extension"
 
 # Completely remove snap subsystem. This will remove some gnome applications from the system
 # including: gnome-calculator gnome-characters gnome-logs gnome-system-monitor
@@ -37,7 +39,7 @@ rm -fr ~/snap
 
 # add flathub and install the spotify client and gimp from flathub
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-flatpak install -y flathub com.spotify.Client org.gimp.GIMP
+flatpak install -y flathub "$flatpak_install"
 
 # install Codium - a free & open source distribution of Microsoft's VSCode
 wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | sudo apt-key add - 
