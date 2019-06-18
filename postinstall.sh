@@ -57,7 +57,7 @@ fi
 
 # install user.js located in same folder as script into all default firefox profile(s)
 if [ -e user.js ]; then
-    cp -r user.js "$HOME"/.mozilla/firefox/{*.default,*.default-release}
+    find "$HOME"/.mozilla/firefox/ -maxdepth 1 -type d \( -name "*.default" -o -name "*.default-release" \) -exec cp user.js {} \;
 fi
 
 # remove livepatch form applications launcher
