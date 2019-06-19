@@ -29,8 +29,8 @@ sudo apt-get update
 sudo apt-get dist-upgrade -y
 
 echo "== Installing/Removing user specified Applications =="
-sudo apt-get remove -y "$apt_remove"
-sudo apt-get install -y "$apt_install" "$apt_gnome_extension"
+sudo apt-get remove -y $apt_remove
+sudo apt-get install -y $apt_install $apt_gnome_extension
 
 # Completely remove snap subsystem. This will remove some gnome applications from the system
 # including: gnome-calculator gnome-characters gnome-logs gnome-system-monitor
@@ -39,7 +39,7 @@ rm -fr ~/snap
 
 # add flathub and install the spotify client and gimp from flathub
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-flatpak install -y flathub "$flatpak_install"
+flatpak install -y flathub $flatpak_install
 
 # install Codium - a free & open source distribution of Microsoft's VSCode
 wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | sudo apt-key add - 
